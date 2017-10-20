@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+// If your extension references something external, use ARG_WITH
+// ARG_WITH("super_array", "for super_array support", "no");
+
+// Otherwise, use ARG_ENABLE
+// ARG_ENABLE("super_array", "enable super_array support", "no");
+
+if (PHP_SUPER_ARRAY != "no") {
+	EXTENSION("super_array", "super_array.c");
+}
+
