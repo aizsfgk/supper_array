@@ -13,9 +13,9 @@ dnl [  --with-super_array             Include super_array support])
 
 dnl Otherwise use enable:
 
-dnl PHP_ARG_ENABLE(super_array, whether to enable super_array support,
+PHP_ARG_ENABLE(super_array, whether to enable super_array support,
 dnl Make sure that the comment is aligned:
-dnl [  --enable-super_array           Enable super_array support])
+[  --enable-super_array           Enable super_array support])
 
 if test "$PHP_SUPER_ARRAY" != "no"; then
   dnl Write more examples of tests here...

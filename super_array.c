@@ -26,6 +26,9 @@
 #include "php_ini.h"
 #include "ext/standard/info.h"
 #include "php_super_array.h"
+#include <stdio.h>
+
+
 
 /* If you declare any globals in php_super_array.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(super_array)
@@ -44,44 +47,43 @@ PHP_INI_END()
 */
 /* }}} */
 
-/* Remove the following function when you have successfully modified config.m4
-   so that your module can be compiled into PHP, it exists only for testing
-   purposes. */
-
-/* Every user-visible function in PHP should document itself in the source */
-/* {{{ proto string confirm_super_array_compiled(string arg)
-   Return a string to confirm that the module is compiled in */
-PHP_FUNCTION(confirm_super_array_compiled)
-{
-	char *arg = NULL;
-	int arg_len, len;
-	char *strg;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &arg, &arg_len) == FAILURE) {
-		return;
-	}
-
-	len = spprintf(&strg, 0, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "super_array", arg);
-	RETURN_STRINGL(strg, len, 0);
-}
-/* }}} */
-/* The previous line is meant for vim and emacs, so it can correctly fold and 
-   unfold functions in source code. See the corresponding marks just before 
-   function definition, where the functions purpose is also documented. Please 
-   follow this convention for the convenience of others editing your code.
-*/
 
 /* {{{ proto array array_unique_recursive(array )
    $arr, int $recur_num) */
 PHP_FUNCTION(array_unique_recursive)
 {
 	int argc = ZEND_NUM_ARGS();
-	zval * = NULL;
+	zval *arr;
+	Bucket *p, *tmp;
+	
 
-	if (zend_parse_parameters(argc TSRMLS_CC, "a", &) == FAILURE) 
+	long recur_num = 1;
+
+	if (zend_parse_parameters(argc TSRMLS_CC, "a|l", &arr, &recur_num) == FAILURE) {
 		return;
+	}
 
-	php_error(E_WARNING, "array_unique_recursive: not yet implemented");
+	/*
+	   打印函数
+	 */
+	php_printf("The one param array is porter : %ld\n", (long) Z_ARRVAL_P(arr));
+
+	
+	p = Z_ARRVAL_P(arr)->pListHead;
+	while (p != NULL) {
+		if (p) {
+			php_printf("p : %ld \n", (long) p->pData);
+		}
+		tmp = p;
+		while (tmp->pNext) {
+			php_printf("tmp->pNext : %ld\n", (long) tmp->pNext->pData);
+			tmp = tmp->pNext;
+		}
+		p = p->pListNext;
+	}
+	
+	php_printf("The two param recur_num is : %ld\n", recur_num);
+
 }
 /* }}} */
 
@@ -156,7 +158,6 @@ PHP_MINFO_FUNCTION(super_array)
  * Every user visible function must have an entry in super_array_functions[].
  */
 const zend_function_entry super_array_functions[] = {
-	PHP_FE(confirm_super_array_compiled,	NULL)		/* For testing, remove later. */
 	PHP_FE(array_unique_recursive,	NULL)
 	PHP_FE_END	/* Must be the last line in super_array_functions[] */
 };
@@ -166,14 +167,14 @@ const zend_function_entry super_array_functions[] = {
  */
 zend_module_entry super_array_module_entry = {
 	STANDARD_MODULE_HEADER,
-	"super_array",
-	super_array_functions,
-	PHP_MINIT(super_array),
+	SUPER_ARRAY_NAME,            // 扩展名称
+	super_array_functions,       // 扩展的注册函数
+	PHP_MINIT(super_array),      
 	PHP_MSHUTDOWN(super_array),
-	PHP_RINIT(super_array),		/* Replace with NULL if there's nothing to do at request start */
-	PHP_RSHUTDOWN(super_array),	/* Replace with NULL if there's nothing to do at request end */
+	PHP_RINIT(super_array),		 /* Replace with NULL if there's nothing to do at request start */
+	PHP_RSHUTDOWN(super_array),	 /* Replace with NULL if there's nothing to do at request end */
 	PHP_MINFO(super_array),
-	PHP_SUPER_ARRAY_VERSION,
+	SUPER_ARRAY_VERSION,         // 模块版本
 	STANDARD_MODULE_PROPERTIES
 };
 /* }}} */

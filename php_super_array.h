@@ -24,7 +24,8 @@
 extern zend_module_entry super_array_module_entry;
 #define phpext_super_array_ptr &super_array_module_entry
 
-#define PHP_SUPER_ARRAY_VERSION "0.1.0" /* Replace with version number for your extension */
+#define SUPER_ARRAY_NAME    "super_array"
+#define SUPER_ARRAY_VERSION "0.1.0" 
 
 #ifdef PHP_WIN32
 #	define PHP_SUPER_ARRAY_API __declspec(dllexport)
@@ -47,6 +48,12 @@ ZEND_BEGIN_MODULE_GLOBALS(super_array)
 	char *global_string;
 ZEND_END_MODULE_GLOBALS(super_array)
 */
+
+/*
+ 函数声明
+*/
+PHP_FUNCTION(array_unique_recursive);
+
 
 /* In every utility function you add that needs to use variables 
    in php_super_array_globals, call TSRMLS_FETCH(); after declaring other 
